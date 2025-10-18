@@ -72,7 +72,7 @@ export default function Header() {
           ) : (
             <>
               <span className="font-medium text-gray-700 dark:text-gray-300">
-                Hi, {user.name || "User"} 👋
+                Hi, {user.name || "User"}
               </span>
               <button
                 onClick={handleLogout}

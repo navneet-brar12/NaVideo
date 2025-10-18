@@ -7,7 +7,6 @@ export const ThemeProvider = ({ children }) => {
     localStorage.getItem("theme") || "light"
   );
 
-  // ✅ Apply theme to <html> so Tailwind dark: works globally
   useEffect(() => {
     const html = document.documentElement;
 

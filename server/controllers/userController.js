@@ -1,8 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js"; // or "../models/userModel.js" depending on your file name
+import User from "../models/User.js"; 
 
-// ✅ REGISTER USER
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -41,7 +40,6 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// ✅ LOGIN USER
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -83,7 +81,6 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// ✅ GET USER PROFILE (Protected Route)
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");

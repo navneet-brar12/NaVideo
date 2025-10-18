@@ -1,11 +1,8 @@
-// server/socket/socketHandler.js
-// Socket handler that tracks userName per socket and emits structured participant info.
-
-const meetings = new Map(); // meetingId -> Map(socketId -> userName)
+const meetings = new Map(); 
 
 function socketHandler(io) {
   io.on("connection", (socket) => {
-    console.log("🔌 User connected:", socket.id);
+    console.log("User connected:", socket.id);
 
     // --- Join a meeting ---
     socket.on("join-meeting", ({ meetingId, userName }) => {
@@ -36,7 +33,7 @@ function socketHandler(io) {
         userName: userName || "Anonymous",
       });
 
-      console.log(`👥 ${userName || "User"} joined meeting ${meetingId}`);
+      console.log(`${userName || "User"} joined meeting ${meetingId}`);
     });
 
     // --- WebRTC signaling relay ---
@@ -50,10 +47,10 @@ function socketHandler(io) {
       if (!meetingId || !message) return;
       const timestamp = new Date().toISOString();
 
-      // ✅ Broadcast to everyone else (not the sender)
+      // Broadcast to everyone else (not the sender)
       socket.to(meetingId).emit("new-message", { sender, message, timestamp });
 
-      console.log(`💬 Message in ${meetingId} from ${sender}: ${message}`);
+      console.log(`Message in ${meetingId} from ${sender}: ${message}`);
     });
 
     // --- Manual leave (when user clicks Leave) ---
@@ -74,11 +71,11 @@ function socketHandler(io) {
             userName: name,
           });
 
-          console.log(`❌ ${name} (${socket.id}) disconnected from ${meetingId}`);
+          console.log(`${name} (${socket.id}) disconnected from ${meetingId}`);
 
           if (participants.size === 0) {
             meetings.delete(meetingId);
-            console.log(`💨 Meeting ${meetingId} deleted (empty)`);
+            console.log(`Meeting ${meetingId} deleted (empty)`);
           }
 
           break; // a socket belongs to only one meeting
@@ -105,11 +102,11 @@ function leaveMeeting(socket, meetingId) {
     userName: name,
   });
 
-  console.log(`👋 ${name} left meeting ${meetingId}`);
+  console.log(`${name} left meeting ${meetingId}`);
 
   if (participants.size === 0) {
     meetings.delete(meetingId);
-    console.log(`💨 Meeting ${meetingId} deleted (empty)`);
+    console.log(`Meeting ${meetingId} deleted (empty)`);
   }
 }
 
