@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* 🌗 Smooth global transitions */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 🌞 Light Mode */
+body {
+  @apply bg-white text-gray-900;
+}
+
+/* 🌙 Dark Mode */
+html.dark body {
+  @apply bg-gray-900 text-gray-100;
+}
+
+/* ✨ Smooth transition for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
