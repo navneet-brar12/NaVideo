@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -50,7 +50,6 @@ export default function Register() {
       if (!res.ok) {
         setError(data.message || "Registration failed");
       } else {
-        // ✅ Auto-login immediately
         const userData = {
           name: data.user.name,
           email: data.user.email,

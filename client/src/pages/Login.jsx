@@ -1,38 +1,47 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", {
-        email,
-        password,
+      const res = await fetch(`${API_BASE}/api/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (response.data && response.data.user) {
-        const userData = {
-          name: response.data.user.name,
-          email: response.data.user.email,
-          token: response.data.token,
-        };
+      const data = await res.json();
 
+      if (!res.ok) {
+        setError(data.message || "Invalid credentials or server error.");
+      } else if (data && data.user) {
+        const userData = {
+          name: data.user.name,
+          email: data.user.email,
+          token: data.token,
+        };
         login(userData);
         navigate("/");
       }
     } catch (err) {
       console.error(err);
-      setError("Invalid credentials or server error.");
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,9 +78,14 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-400 text-white font-semibold py-2 rounded-lg transition-all duration-200"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg font-semibold text-white transition-all duration-200 ${
+              loading
+                ? "bg-sky-300 dark:bg-sky-700"
+                : "bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-400"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
