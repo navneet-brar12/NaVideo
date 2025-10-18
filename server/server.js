@@ -21,13 +21,10 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // e.g. http://localhost:5173
+    origin: process.env.CLIENT_URL || "*", // fallback for Vercel
     credentials: true,
   })
 );
-
-// Routes
-app.use("/api/users", userRoutes);
 
 // -------------------------
 // 🧠 MongoDB Connection
@@ -38,37 +35,42 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // -------------------------
-// 🌐 Express Routes (Optional test route)
+// 🌐 Routes
 // -------------------------
 app.get("/", (req, res) => {
   res.send("🚀 NaVideo Backend is running successfully!");
 });
 
-// ✅ Add this for testing backend connection
 app.get("/api/users/test", (req, res) => {
   res.json({ message: "Backend working ✅" });
 });
 
+app.use("/api/users", userRoutes);
+
 // -------------------------
-// 💬 Socket.io Server Setup
+// 💬 Socket.io Setup
 // -------------------------
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL || "*",
     methods: ["GET", "POST"],
   },
 });
 
-// Handle all socket-related events
+// Handle all socket events
 socketHandler(io);
 
 // -------------------------
-// 🚀 Start the Server
+// 🚀 Server / Export for Vercel
 // -------------------------
-const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  httpServer.listen(PORT, () =>
+    console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  );
+}
 
-httpServer.listen(PORT, () => {
-  console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// ✅ Export for Vercel serverless function
+export default app;
