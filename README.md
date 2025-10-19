@@ -1,7 +1,7 @@
-# NaVideo — Real-Time Video Calling Web App (Google Meet Clone)
+# NaVideo — Real-Time Video Calling Web App 
 
 NaVideo is a **real-time video conferencing web application** built using **React**, **Node.js**, **Express**, **MongoDB**, **WebRTC**, and **Socket.IO**.  
-It allows multiple participants to **join a virtual meeting**, **chat**, **toggle camera/mic**, and **share their screen**, all in a sleek Google Meet–style interface.
+It allows multiple participants to **join a virtual meeting**, **chat**, **toggle camera/mic**, and **share their screen**.
 
 ---
 
@@ -43,6 +43,20 @@ It allows multiple participants to **join a virtual meeting**, **chat**, **toggl
 **WebRTC:**
 - Peer-to-peer video/audio connections
 - STUN/TURN servers for NAT traversal
+
+  ## Run Locally
+
+> Folder structure:
+> ```
+> /NaVideo
+>   /server    # backend (Express + Socket.IO)
+>   /client    # frontend (React + Tailwind)
+> ```
+
+### Clone repository
+```bash
+git clone https://github.com/<your-username>/NaVideo.git
+cd NaVideo
 
 ---
 
