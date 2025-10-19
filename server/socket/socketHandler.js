@@ -1,6 +1,7 @@
-const meetings = new Map(); 
+// server/socket/socketHandler.js
+const meetings = new Map();
 
-function socketHandler(io) {
+const socketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
@@ -83,12 +84,10 @@ function socketHandler(io) {
       }
     });
   });
-}
+};
 
-/**
- * Helper: Remove user from meeting manually
- */
-function leaveMeeting(socket, meetingId) {
+// Helper function
+const leaveMeeting = (socket, meetingId) => {
   if (!meetings.has(meetingId)) return;
   const participants = meetings.get(meetingId);
   if (!participants.has(socket.id)) return;
@@ -108,6 +107,6 @@ function leaveMeeting(socket, meetingId) {
     meetings.delete(meetingId);
     console.log(`Meeting ${meetingId} deleted (empty)`);
   }
-}
+};
 
-module.exports = socketHandler;
+export default socketHandler;

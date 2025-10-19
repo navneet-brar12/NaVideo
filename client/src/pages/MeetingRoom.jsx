@@ -720,77 +720,170 @@ export default function MeetingRoom() {
         <p className="text-gray-500 font-medium text-sm md:text-base">Meeting ID: {meetingId}</p>
       </div>
 
-      <div className="flex-grow flex flex-col md:flex-row gap-4 w-full max-w-7xl mx-auto relative">
-        {/* Main Video Grid */}
-        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {/* Screen Share View */}
-          {sharingScreen && (
-            <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-md">
-              <video ref={screenVideoRef} autoPlay playsInline className="w-full h-full object-contain bg-black" />
-              {cameraOn && (
-                <video
-                  ref={localVideoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="absolute bottom-4 right-4 w-1/4 aspect-video rounded-lg border-2 border-white shadow-lg object-cover"
-                />
-              )}
-            </div>
-          )}
+        {/* Main Video Area */}
+<div className="flex-grow flex flex-col md:flex-row gap-4 w-full max-w-7xl mx-auto relative">
+  {sharingScreen ? (
+    // --- SCREEN SHARING LAYOUT (Google Meet style, responsive) ---
+    <div className="relative w-full h-[80vh] bg-black rounded-2xl overflow-hidden shadow-lg flex items-center justify-center">
+      {/* Large screen share video */}
+      <video
+        ref={screenVideoRef}
+        autoPlay
+        playsInline
+        className="w-full h-full object-contain bg-black transition-all duration-300"
+      />
 
-          {!sharingScreen && (
-            <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden shadow-md flex items-center justify-center">
-              <video ref={localVideoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
-              {!cameraOn && (
-                <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                  <p className="text-gray-300 font-semibold">Camera Off</p>
-                </div>
-              )}
-              {!micOn && (
-                <div className="absolute bottom-2 right-2 bg-rose-600 text-white p-2 rounded-full shadow-md">
-                  <MicOff className="w-4 h-4" />
-                </div>
-              )}
-              <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-md">
-                {userName} (You)
+      {/* Floating bottom tiles */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-wrap justify-center gap-3 px-4 py-3 bg-black/30 backdrop-blur-md rounded-2xl shadow-xl transition-all duration-300 max-w-[95%]">
+        {/* Local user (You) */}
+        {cameraOn && (
+          <div className="relative">
+            <video
+              ref={localVideoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-28 sm:w-32 h-20 rounded-xl border-2 border-white/70 shadow-md object-cover transition-all duration-300"
+            />
+            {!micOn && (
+              <div className="absolute bottom-1 right-1 bg-rose-600 text-white p-1 rounded-full">
+                <MicOff className="w-3 h-3" />
               </div>
-            </div>
-          )}
-
-          {renderRemoteVideos()}
-        </div>
-
-        {/* Chat panel */}
-        {chatOpen && (
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full md:w-80 md:min-w-[20rem] flex flex-col overflow-hidden">
-            <div className="bg-sky-600 text-white font-semibold py-3 px-4 flex justify-between items-center">
-              <span>Chat</span>
-              <button onClick={() => setChatOpen(false)} className="text-white text-lg font-bold hover:opacity-80">×</button>
-            </div>
-
-            <div className="flex-grow overflow-y-auto px-4 py-3 space-y-4">
-              {messages.map((msg, i) => {
-                const isUser = msg.sender === userName || msg.sender === "You";
-                return (
-                  <div key={i} className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
-                    <div className={`px-4 py-2 rounded-2xl text-sm shadow-sm ${isUser ? "bg-sky-600 text-white rounded-br-none" : "bg-gray-200 text-gray-800 rounded-bl-none"}`}>
-                      {!isUser && <p className="text-xs font-semibold text-gray-600 mb-1">{msg.sender}</p>}
-                      <p>{msg.text}</p>
-                      <p className="text-[10px] text-gray-400 mt-1 text-right">{formatTime(msg.time)}</p>
-                    </div>
-                  </div>
-                );
-              })}
-              <div ref={chatEndRef} />
-            </div>
-
-            <form onSubmit={handleSend} className="border-t border-gray-200 p-3 flex items-center gap-2">
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type a message..." className="flex-grow border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
-              <button type="submit" className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg font-medium transition">Send</button>
-            </form>
+            )}
           </div>
         )}
+
+        {/* Remote participants */}
+        {participants.length > 0 &&
+          participants.map((p) => {
+            const peerId = p.socketId;
+            if (socketRef.current?.id === peerId) return null;
+            if (!remoteVideoRefs.current[peerId]) remoteVideoRefs.current[peerId] = null;
+            return (
+              <div key={peerId} className="relative">
+                <video
+                  ref={(el) => {
+                    remoteVideoRefs.current[peerId] = el;
+                    const stream = remoteStreamsRef.current[peerId];
+                    if (el && stream instanceof MediaStream) {
+                      try {
+                        el.srcObject = stream;
+                        el.muted = false;
+                        el.volume = 1;
+                        el.play?.().catch(() => {});
+                      } catch {}
+                    }
+                  }}
+                  autoPlay
+                  playsInline
+                  className="w-28 sm:w-32 h-20 rounded-xl border-2 border-white/70 shadow-md object-cover transition-all duration-300"
+                />
+                <div className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
+                  {p.userName || "Participant"}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </div>
+  ) : (
+    // --- NORMAL GRID LAYOUT (for when not sharing screen) ---
+    <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden shadow-md flex items-center justify-center">
+        <video ref={localVideoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
+        {!cameraOn && (
+          <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
+            <p className="text-gray-300 font-semibold">Camera Off</p>
+          </div>
+        )}
+        {!micOn && (
+          <div className="absolute bottom-2 right-2 bg-rose-600 text-white p-2 rounded-full shadow-md">
+            <MicOff className="w-4 h-4" />
+          </div>
+        )}
+        <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-md">
+          {userName} (You)
+        </div>
+      </div>
+
+      {renderRemoteVideos()}
+    </div>
+  )}
+
+
+
+        
+        {/* Chat panel */}
+{chatOpen && (
+  <div className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full md:w-80 md:min-w-[20rem] flex flex-col overflow-hidden">
+    {/* Chat header */}
+    <div className="bg-sky-600 text-white font-semibold py-3 px-4 flex justify-between items-center">
+      <span>Chat</span>
+      <button
+        onClick={() => setChatOpen(false)}
+        className="text-white text-lg font-bold hover:opacity-80"
+      >
+        ×
+      </button>
+    </div>
+
+    {/* Chat messages area */}
+<div className="relative flex-grow max-h-[65vh] overflow-y-auto px-4 py-3 flex flex-col gap-2 scroll-smooth">
+      {/* optional visual fade (like Meet) */}
+      <div className="absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none" />
+
+      {messages.map((msg, i) => {
+        const isUser = msg.sender === userName || msg.sender === "You";
+        return (
+          <div key={i} className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
+            <div
+              className={`px-4 py-2 rounded-2xl text-sm shadow-sm ${
+                isUser
+                  ? "bg-sky-600 text-white rounded-br-none"
+                  : "bg-gray-200 text-gray-800 rounded-bl-none"
+              }`}
+            >
+              {!isUser && (
+                <p className="text-xs font-semibold text-gray-600 mb-1">{msg.sender}</p>
+              )}
+              <p>{msg.text}</p>
+              <p className="text-[10px] text-gray-400 mt-1 text-right">
+                {formatTime(msg.time)}
+              </p>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Auto-scroll target */}
+      <div ref={chatEndRef} />
+
+      {/* bottom fade for aesthetic */}
+      <div className="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
+    </div>
+
+    {/* Input box */}
+    <form
+      onSubmit={handleSend}
+      className="border-t border-gray-200 p-3 flex items-center gap-2"
+    >
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Type a message..."
+        className="flex-grow border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+      />
+      <button
+        type="submit"
+        className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg font-medium transition"
+      >
+        Send
+      </button>
+    </form>
+  </div>
+)}
+
       </div>
 
       {/* Controls */}

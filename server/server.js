@@ -5,18 +5,24 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import socketHandler from "./socket/socketHandler.js";
 import userRoutes from "./routes/userRoutes.js";
-import { connectDB } from "./config/db.js"; 
+import { connectDB } from "./config/db.js";
 
 dotenv.config();
-connectDB(); 
+connectDB();
 
 const app = express();
 
-// Middleware
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "https://localhost:5173",
+];
+
 app.use(express.json());
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*", 
+    origin: allowedOrigins,
     credentials: true,
   })
 );
@@ -35,19 +41,17 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || "*",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
 });
 
-// Handle all socket events
 socketHandler(io);
 
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
-  httpServer.listen(PORT, () =>
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-  );
-}
+const PORT = process.env.PORT || 5000;
+httpServer.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log("Allowed Origins:", allowedOrigins);
+});
 
 export default app;

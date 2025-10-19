@@ -9,7 +9,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/test", (req, res) => {
-  res.json({ message: "Backend working ✅" });
+  res.json({ message: "Backend working " });
 });
 
 router.post("/register", registerUser);
