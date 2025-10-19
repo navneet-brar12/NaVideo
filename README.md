@@ -58,15 +58,15 @@ It allows multiple participants to **join a virtual meeting**, **chat**, **toggl
 git clone https://github.com/<your-username>/NaVideo.git
 cd NaVideo
 
-###Backend Setup
+**###Backend Setup**
 cd server
 npm install
 
-###Frontend Setup
+**###Frontend Setup**
 cd client
 npm run dev
 
-.env file example
+**.env file example**
 PORT=5000
 CLIENT_URL=http://localhost:5173
 MONGO_URI=your_mongodb_connection_string
