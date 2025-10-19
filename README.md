@@ -58,6 +58,26 @@ It allows multiple participants to **join a virtual meeting**, **chat**, **toggl
 git clone https://github.com/<your-username>/NaVideo.git
 cd NaVideo
 
+###Backend Setup
+cd server
+npm install
+
+###Frontend Setup
+cd client
+npm run dev
+
+.env file example
+PORT=5000
+CLIENT_URL=http://localhost:5173
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+STUN_SERVER_1=stun:stun.l.google.com:19302
+STUN_SERVER_2=stun:stun1.l.google.com:19302
+TURN_SERVER=turn:navideo.metered.live:80
+TURN_USERNAME=your_turn_username
+TURN_PASSWORD=your_turn_password
+
+
 ---
 
 
