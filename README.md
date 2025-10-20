@@ -1,7 +1,7 @@
-# NaVideo — Real-Time Video Calling Web App (Google Meet Clone)
+# NaVideo — Real-Time Video Calling Web App 
 
 NaVideo is a **real-time video conferencing web application** built using **React**, **Node.js**, **Express**, **MongoDB**, **WebRTC**, and **Socket.IO**.  
-It allows multiple participants to **join a virtual meeting**, **chat**, **toggle camera/mic**, and **share their screen**, all in a sleek Google Meet–style interface.
+It allows multiple participants to **join a virtual meeting**, **chat**, **toggle camera/mic**, and **share their screen**.
 
 ---
 
@@ -43,6 +43,44 @@ It allows multiple participants to **join a virtual meeting**, **chat**, **toggl
 **WebRTC:**
 - Peer-to-peer video/audio connections
 - STUN/TURN servers for NAT traversal
+
+  ## Run Locally
+
+> Folder structure:
+> ```
+> /NaVideo
+>   /server    # backend (Express + Socket.IO)
+>   /client    # frontend (React + Tailwind)
+> ```
+
+### Clone repository
+```bash
+git clone https://github.com/<your-username>/NaVideo.git
+cd NaVideo
+
+### Backend Setup
+```bash
+cd server
+npm install
+
+create a .env file inside the server folder
+PORT=5000
+CLIENT_URL=http://localhost:5173
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+
+STUN_SERVER_1=stun:stun.l.google.com:19302
+STUN_SERVER_2=stun:stun1.l.google.com:19302
+
+TURN_SERVER=turn:navideo.metered.live:80
+TURN_USERNAME=your_turn_username
+TURN_PASSWORD=your_turn_password
+
+Start the backend:
+npm run dev
+The backend will run at http://localhost:5000
+
+
 
 ---
 
