@@ -12,7 +12,7 @@ import {
   MonitorDown,
 } from "lucide-react";
 
-const SOCKET_SERVER = "http://localhost:5000";
+const SOCKET_SERVER = "https://na-video.vercel.app";
 const RTC_CONFIG = {
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" },
