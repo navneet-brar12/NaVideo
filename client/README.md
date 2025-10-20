@@ -1,16 +1,50 @@
-# React + Vite
+# NaVideo — Real-Time Video Calling Web App (Google Meet Clone)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+NaVideo is a **real-time video conferencing web application** built using **React**, **Node.js**, **Express**, **MongoDB**, **WebRTC**, and **Socket.IO**.  
+It allows multiple participants to **join a virtual meeting**, **chat**, **toggle camera/mic**, and **share their screen**, all in a sleek Google Meet–style interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
 
-## React Compiler
+- **Frontend (React + Tailwind):** [https://na-video-frontend.vercel.app](https://na-video-frontend.vercel.app)
+- **Backend (Express + Socket.IO):** [https://na-video.vercel.app](https://na-video.vercel.app)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Join or Create Meeting** — Start or join using a unique meeting ID  
+**Real-Time Audio/Video** — Peer-to-peer streaming via WebRTC  
+**Screen Sharing** — Share your screen seamlessly  
+**Instant Chat** — Real-time text chat with auto-scroll  
+**Toggle Camera & Mic** — Enable/disable audio and video anytime  
+**Responsive Design** — Works perfectly on desktop and mobile  
+**Secure JWT-based Auth (Optional)** — User login/register system ready  
+**Deployed** — Fully deployed frontend & backend (Vercel)
+
+---
+
+## Tech Stack
+
+**Frontend:**
+- React.js (Vite)
+- Tailwind CSS
+- Socket.IO Client
+- Lucide React Icons
+
+**Backend:**
+- Node.js + Express
+- Socket.IO (WebSocket signaling)
+- MongoDB + Mongoose
+- JWT Authentication
+- dotenv, bcryptjs
+
+**WebRTC:**
+- Peer-to-peer video/audio connections
+- STUN/TURN servers for NAT traversal
+
+---
+
+
+
