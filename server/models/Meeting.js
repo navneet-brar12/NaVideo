@@ -4,7 +4,9 @@ const meetingSchema = new mongoose.Schema(
   {
     meetingId: { type: String, required: true, unique: true },
     host: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    participants: [{ type: String }], // store socket IDs or usernames
+    participants: [{ type: String }],
+    scheduledFor: { type: Date }, 
+    title: { type: String }, 
   },
   { timestamps: true }
 );

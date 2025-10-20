@@ -12,6 +12,7 @@ export default function Header() {
     { path: "/create", label: "Create Meeting" },
     { path: "/join", label: "Join Meeting" },
     { path: "/my-meetings", label: "My Meetings" },
+    { path: "/schedule-meeting", label: "Schedule Meeting" },
   ];
 
   const handleLogout = () => {
@@ -22,7 +23,7 @@ export default function Header() {
   return (
     <header className="w-full sticky top-0 z-50 border-b backdrop-blur-sm shadow-sm bg-white/80 border-gray-200 text-gray-900 dark:bg-gray-900/80 dark:border-gray-700 dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
-        
+
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
           <img
@@ -41,11 +42,10 @@ export default function Header() {
             <Link
               key={path}
               to={path}
-              className={`font-medium transition ${
-                location.pathname === path
+              className={`font-medium transition ${location.pathname === path
                   ? "text-sky-600 border-b-2 border-sky-600 pb-1 dark:text-sky-400 dark:border-sky-400"
                   : "text-gray-600 hover:text-sky-600 dark:text-gray-300 dark:hover:text-sky-400"
-              }`}
+                }`}
             >
               {label}
             </Link>

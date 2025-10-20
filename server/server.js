@@ -6,6 +6,8 @@ import { Server } from "socket.io";
 import socketHandler from "./socket/socketHandler.js";
 import userRoutes from "./routes/userRoutes.js";
 import { connectDB } from "./config/db.js";
+import scheduledMeetingRoutes from "./routes/scheduledMeetingRoutes.js";
+import meetingRoutes from "./routes/meetingRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -36,6 +38,10 @@ app.get("/api/users/test", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+
+app.use("/api/scheduled-meetings", scheduledMeetingRoutes);
+
+app.use("/api/meetings", meetingRoutes);
 
 const httpServer = createServer(app);
 

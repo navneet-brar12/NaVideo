@@ -11,6 +11,7 @@ import PreJoin from "./pages/PreJoin";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ThemeToggle from "./components/ThemeToggle"; 
+import ScheduleMeeting from "./pages/ScheduleMeeting";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/prejoin/:meetingId" element={<PreJoin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/schedule-meeting" element={<ScheduleMeeting />} />
         </Routes>
       </main>
 
