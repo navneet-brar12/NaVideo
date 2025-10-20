@@ -14,8 +14,10 @@ import {
 
 const SOCKET_SERVER =
   import.meta.env.MODE === "production"
-    ? "https://na-video.vercel.app"
+    ? import.meta.env.VITE_API_URL
     : "http://localhost:5000";
+
+
 const RTC_CONFIG = {
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" },
