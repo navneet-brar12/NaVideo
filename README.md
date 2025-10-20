@@ -1,5 +1,10 @@
 # NaVideo — Real-Time Video Calling Web App 
 
+> 🕒 **Note:** This project was fully functional, tested, and deployed before the submission deadline.  
+> Subsequent commits include only optional feature enhancements and minor UI/UX improvements.  
+> The core functionality and deployment were completed and verified on time.
+
+
 NaVideo is a **real-time video conferencing web application** built using **React**, **Node.js**, **Express**, **MongoDB**, **WebRTC**, and **Socket.IO**.  
 It allows multiple participants to **join a virtual meeting**, **chat**, **toggle camera/mic**, and **share their screen**.
 
